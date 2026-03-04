@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Corner Border Effect</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0c10;
+    color: #e0e8f0;
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 60px 20px;
+  }
+
+  h2 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #4a7fa5;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ─── THE TECHNIQUE ─────────────────────────────────────────
+     Use ::before and ::after pseudo-elements, each handling
+     two corners via box-shadow or border tricks.
+  ─────────────────────────────────────────────────────────── */
+
+  /* METHOD 1: Pure CSS — 4 pseudo-element corners via clip */
+  .corner-border {
+    position: relative;
+    padding: 28px 36px;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .corner-border::before,
+  .corner-border::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: #ffffff;
+    border-style: solid;
+  }
+
+  /* top-left */
+  .corner-border::before {
+    top: 0; left: 0;
+    border-width: 2px 0 0 2px;
+  }
+  /* bottom-right */
+  .corner-border::after {
+    bottom: 0; right: 0;
+    border-width: 0 2px 2px 0;
+  }
+
+  /* We need 2 more elements for the other corners.
+     Use a wrapper span or the inner element's pseudos. */
+  .corner-border .inner::before,
+  .corner-border .inner::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: #ffffff;
+    border-style: solid;
+  }
+
+  .corner-border .inner::before {
+    top: 0; right: 0;
+    border-width: 2px 2px 0 0;
+  }
+
+  .corner-border .inner::after {
+    bottom: 0; left: 0;
+    border-width: 0 0 2px 2px;
+  }
+
+  .inner { display: contents; }
+
+  /* ── BUTTON VARIANT ── */
+  .corner-btn {
+    position: relative;
+    padding: 14px 32px;
+    background: transparent;
+    color: #e0e8f0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .corner-btn::before,
+  .corner-btn::after,
+  .corner-btn span::before,
+  .corner-btn span::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: #fff;
+    border-style: solid;
+    transition: width 0.25s ease, height 0.25s ease, border-color 0.25s;
+  }
+
+  .corner-btn::before  { top: 0;    left: 0;  border-width: 2px 0 0 2px; }
+  .corner-btn::after   { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+  .corner-btn span::before { top: 0;    right: 0; border-width: 2px 2px 0 0; }
+  .corner-btn span::after  { bottom: 0; left: 0;  border-width: 0 0 2px 2px; }
+
+  /* Hover: corners expand + color shift */
+  .corner-btn:hover::before,
+  .corner-btn:hover::after,
+  .corner-btn:hover span::before,
+  .corner-btn:hover span::after {
+    width: 100%; height: 100%;
+    border-color: rgba(255,255,255,0.12);
+  }
+  .corner-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+  /* ── COLORED VARIANTS ── */
+  .teal   { --c: #00d4b4; }
+  .amber  { --c: #f5a623; }
+  .red    { --c: #ff4757; }
+
+  .corner-btn.teal::before,  .corner-btn.teal::after,  .corner-btn.teal span::before,  .corner-btn.teal span::after  { border-color: var(--c); }
+  .corner-btn.amber::before, .corner-btn.amber::after, .corner-btn.amber span::before, .corner-btn.amber span::after { border-color: var(--c); }
+  .corner-btn.red::before,   .corner-btn.red::after,   .corner-btn.red span::before,   .corner-btn.red span::after   { border-color: var(--c); }
+
+  .corner-btn.teal  { color: var(--c); }
+  .corner-btn.amber { color: var(--c); }
+  .corner-btn.red   { color: var(--c); }
+
+  /* ── LARGE DIV CARD VARIANT ── */
+  .agent-card {
+    position: relative;
+    width: 340px;
+    padding: 32px 28px;
+    background: rgba(10,15,25,0.8);
+  }
+
+  .agent-card::before, .agent-card::after,
+  .agent-card .cr::before, .agent-card .cr::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.85);
+    transition: width 0.3s, height 0.3s;
+  }
+
+  .agent-card::before  { top: 0;    left: 0;  border-width: 2px 0 0 2px; }
+  .agent-card::after   { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+  .agent-card .cr::before { top: 0;    right: 0; border-width: 2px 2px 0 0; }
+  .agent-card .cr::after  { bottom: 0; left: 0;  border-width: 0 0 2px 2px; }
+
+  .agent-card:hover::before, .agent-card:hover::after,
+  .agent-card:hover .cr::before, .agent-card:hover .cr::after {
+    width: 36px; height: 36px;
+  }
+
+  .agent-card .label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #4a7fa5;
+    margin-bottom: 8px;
+  }
+
+  .agent-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .agent-card p {
+    font-size: 14px;
+    font-weight: 300;
+    color: #8899aa;
+    line-height: 1.7;
+  }
+
+  /* ── CODE SECTION ── */
+  .code-block {
+    background: #0e1420;
+    border-left: 2px solid #ffffff30;
+    padding: 20px 24px;
+    max-width: 640px;
+    width: 100%;
+  }
+
+  pre {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: #8ab4d4;
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+
+  .kw  { color: #c792ea; }
+  .str { color: #c3e88d; }
+  .cm  { color: #546e7a; }
+  .sel { color: #80cbc4; }
+
+  .row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: center; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .section { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+</style>
+</head>
+<body>
+
+  <!-- CARD EXAMPLE -->
+  <div class="section">
+    <h2>// div card</h2>
+    <div class="agent-card">
+      <div class="cr"></div>
+      <div class="label">AGENT DETAILS</div>
+      <h3>Detailed Dossier</h3>
+      <p>Classified intelligence profile. Access restricted to clearance level Ω and above.</p>
+    </div>
+  </div>
+
+  <!-- BUTTON EXAMPLES -->
+  <div class="section">
+    <h2>// buttons</h2>
+    <div class="row">
+      <button class="corner-btn"><span>Execute</span></button>
+      <button class="corner-btn teal"><span>Confirm</span></button>
+      <button class="corner-btn amber"><span>Warning</span></button>
+      <button class="corner-btn red"><span>Abort</span></button>
+    </div>
+  </div>
+
+  <!-- SIMPLE DIV -->
+  <div class="section">
+    <h2>// simple div</h2>
+    <div class="corner-border">
+      <div class="inner"></div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:13px;color:#8ab4d4;">Any content goes here</p>
+    </div>
+  </div>
+
+  <!-- CODE SNIPPET -->
+  <div class="section">
+    <h2>// the css</h2>
+    <div class="code-block">
+<pre><span class="cm">/* 1. Make parent relative */</span>
+<span class="sel">.box</span> { <span class="kw">position</span>: relative; <span class="kw">padding</span>: <span class="str">24px</span>; }
+
+<span class="cm">/* 2. Place corner brackets with pseudos */</span>
+<span class="sel">.box::before, .box::after,
+.box .corners::before, .box .corners::after</span> {
+  <span class="kw">content</span>: <span class="str">''</span>;
+  <span class="kw">position</span>: absolute;
+  <span class="kw">width</span>: <span class="str">16px</span>;
+  <span class="kw">height</span>: <span class="str">16px</span>;
+  <span class="kw">border</span>: <span class="str">2px solid white</span>;
+}
+
+<span class="cm">/* 3. Clip each corner's visible sides */</span>
+<span class="sel">.box::before</span>  { top:0; left:0;  border-width: <span class="str">2px 0 0 2px</span>; } <span class="cm">/* ┌ */</span>
+<span class="sel">.box::after</span>   { top:0; right:0; border-width: <span class="str">2px 2px 0 0</span>; } <span class="cm">/* ┐ */</span>
+<span class="sel">.corners::before</span> { bottom:0; left:0;  border-width: <span class="str">0 0 2px 2px</span>; } <span class="cm">/* └ */</span>
+<span class="sel">.corners::after</span>  { bottom:0; right:0; border-width: <span class="str">0 2px 2px 0</span>; } <span class="cm">/* ┘ */</span>
+
+<span class="cm">/* 4. Hover: corners grow inward */</span>
+<span class="sel">.box:hover::before,
+.box:hover .corners::before</span> { <span class="kw">width</span>: <span class="str">100%</span>; <span class="kw">height</span>: <span class="str">100%</span>; }</pre>
+    </div>
+  </div>
+
+</body>
+</html>

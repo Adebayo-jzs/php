@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="bg-black text-white antialiased" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER-TACTICAL POWER GRID INTERFACE v4.0.1</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'grid-border': '#1a1a1a',
+            'terminal-green': '#00ff41',
+            'terminal-red': '#ff003c',
+            'terminal-bg': '#000000',
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+<style data-purpose="global-effects">
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      overflow: hidden; /* Terminal-like experience */
+    }
+
+    /* Scanline Effect Overlay */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(
+        to bottom,
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%
+      );
+      background-size: 100% 4px;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0.15;
+    }
+
+    /* Flicker Animation */
+    @keyframes flicker {
+      0% { opacity: 0.97; }
+      5% { opacity: 0.95; }
+      10% { opacity: 0.9; }
+      15% { opacity: 0.99; }
+      100% { opacity: 1; }
+    }
+    .flicker-layer {
+      animation: flicker 0.15s infinite;
+    }
+
+    /* Sharp Borders */
+    .panel-border {
+      border: 1px solid #1a1a1a;
+    }
+
+    .status-bar {
+      height: 2px;
+      transition: width 0.3s ease;
+    }
+
+    /* CRT Glow */
+    .glow-green {
+      text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+    }
+    .glow-red {
+      text-shadow: 0 0 5px rgba(255, 0, 60, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-black selection:bg-terminal-green selection:text-black">
+<div class="scanlines"></div>
+<!-- BEGIN: Main Dashboard Layout -->
+<main class="h-screen w-screen flex flex-col p-4 gap-4 flicker-layer overflow-hidden" data-purpose="main-grid-container">
+<!-- BEGIN: Top Telemetry Header -->
+<header class="panel-border p-4 flex justify-between items-center bg-black" data-purpose="header-telemetry">
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="text-xs text-gray-500 uppercase tracking-widest">System Identity</span>
+<span class="text-xl font-bold glow-green text-terminal-green">TACTICAL_GRID_OS_v4.0</span>
+</div>
+<div class="h-10 w-px bg-grid-border"></div>
+<div class="flex flex-col">
+<span class="text-xs text-gray-500 uppercase">Sector Status</span>
+<span class="text-sm font-bold text-terminal-green">[ STABLE_OPERATIONS ]</span>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right">
+<span class="block text-[10px] text-gray-500 uppercase">System Time</span>
+<span class="text-lg tabular-nums" id="system-clock">00:00:00:000</span>
+</div>
+<div class="text-right">
+<span class="block text-[10px] text-gray-500 uppercase">Telemetry Latency</span>
+<span class="text-lg tabular-nums">4.02ms</span>
+</div>
+<div class="panel-border px-3 py-1 bg-terminal-red text-black font-bold text-xs">
+          EMERGENCY DISCONNECT [OFF]
+        </div>
+</div>
+</header>
+<!-- END: Top Telemetry Header -->
+<div class="flex-1 grid grid-cols-12 gap-4 min-h-0">
+<!-- BEGIN: Left Sidebar - Source Integrity -->
+<section class="col-span-3 flex flex-col gap-4" data-purpose="source-integrity">
+<div class="panel-border p-4 flex-1">
+<h2 class="text-xs text-gray-500 uppercase mb-4 tracking-tighter">Power Source Matrix</h2>
+<!-- Source Item 1 -->
+<div class="mb-6 group">
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-bold uppercase">Nuclear Core A-1</span>
+<span class="text-terminal-green text-xs">98.2% LOAD</span>
+</div>
+<div class="w-full bg-grid-border h-1 mb-1">
+<div class="bg-terminal-green h-full w-[98.2%] shadow-[0_0_8px_rgba(0,255,65,0.4)]"></div>
+</div>
+<div class="flex justify-between text-[10px] text-gray-500">
+<span>TEMP: 450°C</span>
+<span>OUTPUT: 1.2GW</span>
+</div>
+</div>
+<!-- Source Item 2 -->
+<div class="mb-6 group">
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-bold uppercase">Solar Array Sigma</span>
+<span class="text-terminal-green text-xs">45.8% LOAD</span>
+</div>
+<div class="w-full bg-grid-border h-1 mb-1">
+<div class="bg-terminal-green h-full w-[45.8%] shadow-[0_0_8px_rgba(0,255,65,0.4)]"></div>
+</div>
+<div class="flex justify-between text-[10px] text-gray-500">
+<span>AZIMUTH: 182°</span>
+<span>OUTPUT: 340MW</span>
+</div>
+</div>
+<!-- Source Item 3 -->
+<div class="mb-6 group">
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-bold uppercase text-terminal-red">Backup Turbine X</span>
+<span class="text-terminal-red text-xs">OFFLINE</span>
+</div>
+<div class="w-full bg-grid-border h-1 mb-1">
+<div class="bg-terminal-red h-full w-[0%] opacity-20"></div>
+</div>
+<div class="flex justify-between text-[10px] text-gray-500">
+<span>RPM: 0.00</span>
+<span>PRESSURE: 0 PSI</span>
+</div>
+</div>
+</div>
+<!-- Battery Storage Component -->
+<div class="panel-border p-4 h-48 flex flex-col justify-between">
+<h2 class="text-xs text-gray-500 uppercase tracking-tighter">Battery Integrity</h2>
+<div class="flex items-center gap-4">
+<div class="relative w-16 h-24 border border-terminal-green flex flex-col-reverse p-1">
+<div class="bg-terminal-green w-full h-1/4 mb-0.5"></div>
+<div class="bg-terminal-green w-full h-1/4 mb-0.5"></div>
+<div class="bg-terminal-green w-full h-1/4 mb-0.5"></div>
+<!-- Top Cap -->
+<div class="absolute -top-2 left-1/4 right-1/4 h-1 border-t border-l border-r border-terminal-green"></div>
+</div>
+<div>
+<span class="text-3xl font-bold tabular-nums">76%</span>
+<span class="block text-[10px] text-gray-500 mt-1 uppercase">Storage Reserve</span>
+<span class="block text-[10px] text-terminal-green mt-1">DISCHARGING: 12.4KW/s</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Left Sidebar -->
+<!-- BEGIN: Center Visualizer - Main Grid Telemetry -->
+<section class="col-span-6 panel-border flex flex-col relative" data-purpose="grid-visualizer">
+<div class="flex-1 flex flex-col p-4 gap-4 overflow-y-auto">
+<!-- GRID PARAMETERS -->
+<div class="flex flex-col gap-2">
+<div class="bg-[#1a1a1a] px-2 py-0.5 w-fit">
+<span class="text-[10px] text-gray-400 uppercase tracking-widest">Grid Parameters</span>
+</div>
+<div class="panel-border grid grid-cols-2 min-h-[160px]">
+<div class="p-6 border-r border-grid-border flex flex-col justify-center">
+<span class="text-[10px] text-gray-500 uppercase mb-2">Customer ID</span>
+<span class="text-2xl font-bold uppercase tracking-tight">Adedeji Adebayo</span>
+</div>
+<div class="p-6 flex flex-col justify-center">
+<span class="text-[10px] text-gray-500 uppercase mb-2">Allocation Tier</span>
+<span class="text-2xl font-bold uppercase tracking-tight">Band B - Upper-Middle Income</span>
+<span class="text-[10px] text-gray-500 mt-2">VAL: ₦4,400,000</span>
+</div>
+</div>
+</div>
+<!-- POWER MONITORING (RE-STYLED GRID TELEMETRY) -->
+<div class="flex flex-col gap-2">
+<div class="bg-[#1a1a1a] px-2 py-0.5 w-fit">
+<span class="text-[10px] text-gray-400 uppercase tracking-widest">Power Monitoring</span>
+</div>
+<div class="panel-border grid grid-cols-2 min-h-[160px]">
+<div class="p-6 border-r border-grid-border flex flex-col justify-center">
+<span class="text-[10px] text-gray-500 uppercase mb-2">Active Feed Source</span>
+<span class="text-2xl font-bold uppercase tracking-tight">Inverter Battery</span>
+</div>
+<div class="p-6 flex flex-col justify-center">
+<span class="text-4xl font-bold text-terminal-green glow-green">19%</span>
+<span class="text-[10px] text-gray-500 uppercase mt-2">Storage Integrity</span>
+<div class="mt-4 border border-terminal-red/50 px-2 py-1 w-fit">
+<span class="text-[9px] text-terminal-red uppercase">No charging source available</span>
+</div>
+</div>
+</div>
+</div>
+<!-- FINANCIAL OVERVIEW -->
+<div class="flex flex-col gap-2">
+<div class="bg-[#1a1a1a] px-2 py-0.5 w-fit">
+<span class="text-[10px] text-gray-400 uppercase tracking-widest">Financial Overview</span>
+</div>
+<div class="panel-border grid grid-cols-2 min-h-[160px]">
+<div class="p-6 border-r border-grid-border flex flex-col justify-center">
+<span class="text-[10px] text-gray-500 uppercase mb-2">Operational Cost / HR</span>
+<span class="text-2xl font-bold tracking-tight">₦40.00</span>
+</div>
+<div class="p-6 flex flex-col justify-center">
+<span class="text-[10px] text-gray-500 uppercase mb-2">Efficiency_Gain</span>
+<span class="text-2xl font-bold text-terminal-green glow-green tracking-tight">+₦160.00</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Center Visualizer -->
+<!-- BEGIN: Right Sidebar - Logs & Alerts -->
+<section class="col-span-3 flex flex-col gap-4" data-purpose="alert-monitor">
+<div class="panel-border flex-1 flex flex-col overflow-hidden">
+<div class="p-4 border-b border-grid-border flex justify-between items-center">
+<h2 class="text-xs text-gray-500 uppercase tracking-widest">System Logs</h2>
+<div class="w-2 h-2 bg-terminal-green animate-pulse rounded-full"></div>
+</div>
+<div class="p-4 flex-1 text-[11px] overflow-y-auto space-y-2 font-mono text-gray-400" id="log-container">
+<div><span class="text-gray-600">[14:22:01]</span> INITIALIZING GRID HANDSHAKE...</div>
+<div><span class="text-gray-600">[14:22:05]</span> CORE ALPHA SYNC SUCCESSFUL</div>
+<div><span class="text-gray-600">[14:22:12]</span> LOAD BALANCING AT 84% SECTOR B</div>
+<div class="text-terminal-red"><span class="text-gray-600">[14:23:45]</span> WARNING: VOLTAGE DIP IN SECTOR 4</div>
+<div><span class="text-gray-600">[14:24:10]</span> AUTO-STABILIZER ENGAGED</div>
+<div><span class="text-gray-600">[14:25:01]</span> LOGS ROTATED</div>
+<div><span class="text-gray-600">[14:25:32]</span> PACKET RECIEVED FROM REMOTE RELAY</div>
+</div>
+</div>
+<div class="panel-border p-4 bg-terminal-red/5">
+<h2 class="text-xs text-terminal-red uppercase mb-4 font-bold tracking-widest flex items-center gap-2">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"></path></svg>
+             Critical Alerts
+          </h2>
+<div class="p-3 bg-terminal-red text-black text-xs font-bold flex justify-between items-center animate-pulse">
+<span>GRID ISOLATION REQUIRED - SECTOR 7</span>
+<span>X</span>
+</div>
+<p class="text-[10px] text-terminal-red mt-2 uppercase">Cascade failure probability: 0.04%</p>
+</div>
+</section>
+<!-- END: Right Sidebar -->
+</div>
+<!-- BEGIN: Footer Interface -->
+<footer class="panel-border p-3 flex justify-between items-center text-[10px] text-gray-500" data-purpose="system-footer">
+<div class="flex gap-4">
+<span>OPERATOR: SYS_ADMIN_ROOT</span>
+<span class="text-terminal-green font-bold">SECURE CONNECTION [AES-256]</span>
+</div>
+<div class="flex gap-6">
+<div class="flex gap-1 items-center">
+<div class="w-2 h-2 bg-terminal-green"></div>
+<span>UPLINK</span>
+</div>
+<div class="flex gap-1 items-center">
+<div class="w-2 h-2 bg-terminal-green"></div>
+<span>DB_CONNECT</span>
+</div>
+<div class="flex gap-1 items-center">
+<div class="w-2 h-2 bg-terminal-red"></div>
+<span>FIREWALL_BYPASS</span>
+</div>
+<div class="ml-4">
+             GRID_COORD: 40.7128° N, 74.0060° W
+          </div>
+</div>
+</footer>
+<!-- END: Footer Interface -->
+</main>
+<!-- END: Main Dashboard Layout -->
+<!-- BEGIN: Logic Scripts -->
+<script data-purpose="ui-clock">
+    // System Clock Update
+    function updateClock() {
+      const now = new Date();
+      const parts = [
+        now.getHours().toString().padStart(2, '0'),
+        now.getMinutes().toString().padStart(2, '0'),
+        now.getSeconds().toString().padStart(2, '0'),
+        now.getMilliseconds().toString().padStart(3, '0')
+      ];
+      document.getElementById('system-clock').innerText = parts.join(':');
+    }
+    setInterval(updateClock, 1);
+  </script>
+<script data-purpose="canvas-grid-visualization">
+    const canvas = document.getElementById('gridCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.onresize = resize;
+    resize();
+
+    // Draw tactical grid points
+    function drawGrid() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#1a1a1a';
+      ctx.lineWidth = 1;
+
+      const step = 40;
+      for (let x = 0; x < canvas.width; x += step) {
+        for (let y = 0; y < canvas.height; y += step) {
+          ctx.beginPath();
+          ctx.arc(x, y, 0.5, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+
+      // Draw random data connections
+      ctx.strokeStyle = 'rgba(0, 255, 65, 0.1)';
+      ctx.beginPath();
+      ctx.moveTo(canvas.width * 0.2, canvas.height * 0.3);
+      ctx.lineTo(canvas.width * 0.8, canvas.height * 0.7);
+      ctx.stroke();
+
+      requestAnimationFrame(drawGrid);
+    }
+    drawGrid();
+  </script>
+<!-- END: Logic Scripts -->
+</body></html>
