@@ -250,7 +250,7 @@ $savings = max(0, $discoCostPerHour - $currentCost);
                     </div>
                     <div class="card corner-border" style="grid-column: span 2;">
                         <div class="inner"></div>
-                        <div class="card-title">System Activity Log</div>
+                        <div class="card-title">LOG</div>
                         <div class="card-value"
                             style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--text-secondary); border-left: 2px solid var(--border); padding-left: 1rem; margin-top: 0.5rem;">
                             > <?php echo $changeoverNote; ?><br>
@@ -280,11 +280,11 @@ $savings = max(0, $discoCostPerHour - $currentCost);
                 </div>
             </section>
 
-            <!-- <div style="margin-top: 2rem; text-align: center;">
+            <div style="margin-top: 2rem; text-align: center;">
                 <a href="tim.php"
                     style="color: var(--text-secondary); text-decoration: none; border: 1px solid var(--border); padding: 0.5rem 1rem; text-transform: uppercase; font-size: 0.7rem;">Clear
-                    diagnostics & Restart</a>
-            </div> -->
+                    Reset</a>
+            </div>
 
         <?php else: ?>
             <form method="post">
