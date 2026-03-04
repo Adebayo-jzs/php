@@ -153,7 +153,7 @@ $savings = max(0, $discoCostPerHour - $currentCost);
 <html lang="en">
 
 <head>
-    <title>PowerStats Dashboard | Tim Advanced Logic Edition</title>
+    <title>PowerStats Dashboard</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <link rel="stylesheet" href="index.css">
