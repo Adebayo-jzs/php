@@ -280,11 +280,7 @@ $savings = max(0, $discoCostPerHour - $currentCost);
                 </div>
             </section>
 
-            <div style="margin-top: 2rem; text-align: center;">
-                <a href="tim.php"
-                    style="color: var(--text-secondary); text-decoration: none; border: 1px solid var(--border); padding: 0.5rem 1rem; text-transform: uppercase; font-size: 0.7rem;">Clear
-                    Reset</a>
-            </div>
+             
 
         <?php else: ?>
             <form method="post">
