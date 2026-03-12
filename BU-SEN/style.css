@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300..700&display=swap');
+body{
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    /* font-family: monospace;  */
+
+}
+.container{
+    width: 600px; 
+    border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid gray;
+    margin: auto;
+    padding-top: 40px;
+    padding-left: 30px;
+    padding-right: 30px; 
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+@media (max-width:600px) {
+    .container{
+        width: 100%; 
+    }
+}
+h1 {
+    text-align: center;
+}
+p.log{
+    color: black;
+    text-align: center; 
+    font-weight: bold;
+    font-size: 33px;
+    
+}                                      
+input{
+    display: block; 
+    width: 100%;
+    border-radius:7px;
+    border: 1px solid gray;  
+    padding: 12px; 
+    outline: none; 
+} 
+input[type=submit]{
+    display: block; 
+    width: 100%;
+    border: none     ;
+    border-radius: 7px;
+    background-color: black;
+    color: white;  
+    padding-top: 15px; 
+    cursor: pointer;
+}
+
+label{
+    font-weight:500; 
+    font-size: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.flex-inputs{
+    display: flex;
+    gap: 7px;
+}
+.flex-inputs div {
+    flex: 1;
+} 
